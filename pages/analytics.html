@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analytics — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Analytics Dashboard</div>
+  <div class="page-subtitle">Your weekly wellness trends and personalized insights.</div>
+
+  <div class="analytics-stats">
+    <div class="card analytic-stat">
+      <div class="analytic-val">—</div>
+      <div class="analytic-label">/100</div>
+      <div class="analytic-sub">Avg Health Score</div>
+    </div>
+    <div class="card analytic-stat">
+      <div class="analytic-val">—</div>
+      <div class="analytic-label">/5</div>
+      <div class="analytic-sub">Avg Mood</div>
+    </div>
+    <div class="card analytic-stat">
+      <div class="analytic-val">0</div>
+      <div class="analytic-label">meditations</div>
+      <div class="analytic-sub">Total Sessions</div>
+    </div>
+    <div class="card analytic-stat">
+      <div class="analytic-val" id="journalCount">0</div>
+      <div class="analytic-label">entries</div>
+      <div class="analytic-sub">Journal Entries</div>
+    </div>
+  </div>
+
+  <div class="card gap-20" style="margin-bottom:20px;">
+    <h3>Weekly Health Metrics</h3>
+    <div class="chart-wrap" style="height:180px;">
+      <canvas id="analyticsChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Wellness Profile</h3>
+      <div class="chart-wrap" style="height:200px;">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>💡 Weekly Insights</h3>
+      <ul class="insights-list">
+        <li class="insight-item"><span class="insight-icon">💡</span>Your health score has room to grow. Try rating daily wellness factors.</li>
+        <li class="insight-item"><span class="insight-icon">🌻</span>Try mood-boosting activities like walks, music, or journaling.</li>
+        <li class="insight-item"><span class="insight-icon">🌙</span>Aim for 7–9 hours of sleep for optimal mental health.</li>
+        <li class="insight-item"><span class="insight-icon">⚠️</span>Your stress is elevated. Consider breathing exercises or a short walk.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    applyTheme();
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') { document.documentElement.setAttribute('data-theme', e.data.theme); initAnalytics(); } });
+    window.addEventListener('DOMContentLoaded', () => {
+      initAnalytics();
+      const entries = JSON.parse(localStorage.getItem('careio-journalEntries') || '[]');
+      document.getElementById('journalCount').textContent = entries.length;
+    });
+  </script>
+</body>
+</html>

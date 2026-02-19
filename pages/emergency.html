@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Emergency Help</div>
+  <div class="page-subtitle">You're not alone. Help is available 24/7.</div>
+
+  <div class="emergency-alert">
+    <div class="emergency-icon">🚨</div>
+    <div>
+      <div class="emergency-title">In immediate danger?</div>
+      <div class="emergency-desc">If you or someone else is in immediate danger, please call emergency services immediately.</div>
+      <div class="emergency-btns">
+        <a href="tel:112"><button class="btn btn-red">📞 Call 112 (India)</button></a>
+        <a href="tel:911"><button class="btn btn-red-outline">📞 Call 911 (US/CAN)</button></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gap-20" style="margin-bottom:20px;">
+    <h3>💙 Mental Health Helplines</h3>
+    <div class="helpline-item">
+      <span class="helpline-badge">IN</span>
+      <div class="helpline-info"><div class="helpline-name">iCall</div><div class="helpline-desc">Psychological counseling & mental health support (Mon–Sat, 8am–10pm)</div></div>
+      <a href="tel:9152987821"><button class="helpline-btn">📞 9152987821</button></a>
+    </div>
+    <div class="helpline-item">
+      <span class="helpline-badge">IN</span>
+      <div class="helpline-info"><div class="helpline-name">Vandrevala Foundation</div><div class="helpline-desc">24/7 mental health helpline across India</div></div>
+      <a href="tel:18602662345"><button class="helpline-btn">📞 1860-2662-345</button></a>
+    </div>
+    <div class="helpline-item">
+      <span class="helpline-badge">IN</span>
+      <div class="helpline-info"><div class="helpline-name">NIMHANS</div><div class="helpline-desc">National Institute of Mental Health helpline</div></div>
+      <a href="tel:08046110007"><button class="helpline-btn">📞 080-46110007</button></a>
+    </div>
+    <div class="helpline-item">
+      <span class="helpline-badge">US</span>
+      <div class="helpline-info"><div class="helpline-name">Crisis Text Line</div><div class="helpline-desc">Free 24/7 crisis support via text (US)</div></div>
+      <button class="helpline-btn" onclick="alert('Text HOME to 741741')">💬 Text HOME to 741741</button>
+    </div>
+    <div class="helpline-item">
+      <span class="helpline-badge">US</span>
+      <div class="helpline-info"><div class="helpline-name">NAMI Helpline</div><div class="helpline-desc">National Alliance on Mental Illness support</div></div>
+      <a href="tel:18009506264"><button class="helpline-btn">📞 1-800-950-6264</button></a>
+    </div>
+    <div class="helpline-item">
+      <span class="helpline-badge">GB</span>
+      <div class="helpline-info"><div class="helpline-name">Samaritans</div><div class="helpline-desc">24/7 listening service for emotional support (UK)</div></div>
+      <a href="tel:116123"><button class="helpline-btn">📞 116 123</button></a>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">🚩 When to Seek Help</div>
+      <ul class="info-card-list">
+        <li>Thoughts of self-harm or suicide</li>
+        <li>Inability to function in daily life</li>
+        <li>Severe panic attacks</li>
+        <li>Feeling completely hopeless</li>
+        <li>Substance dependence</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">💚 Self-Care Strategies</div>
+      <ul class="info-card-list">
+        <li>Practice mindfulness daily</li>
+        <li>Maintain social connections</li>
+        <li>Exercise for 30 minutes daily</li>
+        <li>Limit social media consumption</li>
+        <li>Get adequate sleep</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">💛 Support a Friend</div>
+      <ul class="info-card-list">
+        <li>Listen without judgment</li>
+        <li>Ask them how they're feeling</li>
+        <li>Encourage professional help</li>
+        <li>Check in regularly</li>
+        <li>Be patient and present</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🌐 Online Resources</h3>
+    <div class="resource-grid">
+      <a href="https://www.who.int/health-topics/mental-health" target="_blank" style="text-decoration:none;">
+        <div class="resource-item"><div class="resource-icon">🌍</div><div><div class="resource-name">WHO Mental Health</div><div class="resource-sub">Global mental health resources</div></div></div>
+      </a>
+      <a href="https://www.nimh.nih.gov" target="_blank" style="text-decoration:none;">
+        <div class="resource-item"><div class="resource-icon">🧠</div><div><div class="resource-name">NIMH</div><div class="resource-sub">National Institute of Mental Health</div></div></div>
+      </a>
+      <a href="https://www.mind.org.uk" target="_blank" style="text-decoration:none;">
+        <div class="resource-item"><div class="resource-icon">💙</div><div><div class="resource-name">Mind UK</div><div class="resource-sub">Mental health support & information</div></div></div>
+      </a>
+      <a href="https://www.headspace.com/blog" target="_blank" style="text-decoration:none;">
+        <div class="resource-item"><div class="resource-icon">🧘</div><div><div class="resource-name">Headspace Blog</div><div class="resource-sub">Mindfulness & meditation guides</div></div></div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    applyTheme();
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+  </script>
+</body>
+</html>

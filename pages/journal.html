@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Journal — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Daily Journal</div>
+  <div class="page-subtitle">Write freely — your entries are saved locally and privately.</div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="journal-header">
+      <div>
+        <div style="font-weight:600;">New Entry</div>
+        <div class="journal-date" id="journalTodayDate">Thursday, February 19</div>
+      </div>
+      <div class="mood-emojis" id="journalMoods">
+        <span onclick="selectJournalMood(this)">😄</span>
+        <span onclick="selectJournalMood(this)">🙂</span>
+        <span onclick="selectJournalMood(this)">😐</span>
+        <span onclick="selectJournalMood(this)">😔</span>
+        <span onclick="selectJournalMood(this)">😰</span>
+        <span onclick="selectJournalMood(this)">😤</span>
+        <span onclick="selectJournalMood(this)">🥱</span>
+      </div>
+    </div>
+    <input class="journal-title-input" placeholder="Entry title (optional)" id="journalTitle">
+    <textarea style="height:120px;line-height:1.6;" id="journalBody" placeholder="What's on your mind today? Write freely — no judgment here..."></textarea>
+    <span class="journal-prompt" onclick="setJournalPrompt()">✦ Need inspiration? Try a prompt</span>
+    <br>
+    <button class="btn" onclick="saveJournal()">💾 Save Entry</button>
+  </div>
+
+  <div class="card" id="journalList">
+    <div class="journal-empty">
+      <div class="journal-empty-icon">📖</div>
+      <div class="journal-empty-text">No entries yet<br>Write your first journal entry above</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    applyTheme();
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('journalTodayDate').textContent = new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+      initJournal();
+    });
+  </script>
+</body>
+</html>

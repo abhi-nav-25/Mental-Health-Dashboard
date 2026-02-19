@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sleep Tracker — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Sleep Tracker</div>
+  <div class="page-subtitle">Monitor your sleep patterns for better mental and physical health.</div>
+
+  <div class="sleep-layout">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:1.2rem;">🌙</span>
+        <div>
+          <div style="font-size:0.78rem;color:var(--text3);">Sleep Duration</div>
+          <div style="font-size:0.82rem;font-weight:600;">Last night's sleep</div>
+        </div>
+      </div>
+      <div class="sleep-duration-display">
+        <div class="sleep-hours" id="sleepHours">7h</div>
+        <div class="sleep-quality-lbl">Good Sleep</div>
+      </div>
+      <input type="range" min="1" max="12" value="7" id="sleepDurationSlider" style="margin-top:12px;">
+      <div class="sleep-bar-row">
+        <span>1h</span><span>Recommended: 7–9h</span><span>12h</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Sleep Details</h3>
+      <div class="time-inputs">
+        <div class="time-input-wrap">
+          <label>Bedtime</label>
+          <input type="time" value="23:00">
+        </div>
+        <div class="time-input-wrap">
+          <label>Wake Up</label>
+          <input type="time" value="07:00">
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="margin-bottom:8px;">Sleep Quality</label>
+        <div class="quality-btns">
+          <button class="quality-btn"><span class="q-emoji">😴</span>Poor</button>
+          <button class="quality-btn"><span class="q-emoji">😐</span>Fair</button>
+          <button class="quality-btn selected"><span class="q-emoji">🙂</span>Good</button>
+          <button class="quality-btn"><span class="q-emoji">😊</span>Great</button>
+          <button class="quality-btn"><span class="q-emoji">⭐</span>Excellent</button>
+        </div>
+      </div>
+      <button class="btn btn-full" onclick="saveSleep()">Save Sleep Log</button>
+    </div>
+  </div>
+
+  <div class="card gap-20" style="margin-bottom:20px;">
+    <h3>Weekly Sleep Duration</h3>
+    <div class="chart-wrap">
+      <canvas id="sleepChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🌛 Sleep Hygiene Tips</h3>
+    <ul class="tips-list">
+      <li><span class="tip-dot">✦</span>Maintain a consistent sleep schedule, even on weekends</li>
+      <li><span class="tip-dot">✦</span>Avoid screens 1 hour before bedtime</li>
+      <li><span class="tip-dot">✦</span>Keep your bedroom cool, dark, and quiet</li>
+      <li><span class="tip-dot">✦</span>Avoid caffeine after 2 PM</li>
+      <li><span class="tip-dot">✦</span>Try a short relaxation or breathing exercise before sleep</li>
+    </ul>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    applyTheme();
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') { document.documentElement.setAttribute('data-theme', e.data.theme); drawSleepChart(); } });
+    window.addEventListener('DOMContentLoaded', initSleepTracker);
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARE.IO — Mental Wellness</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #content-frame {
+      flex: 1; border: none;
+      background: var(--bg);
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">💙</div>
+      <span class="logo-text">CARE.IO</span>
+    </div>
+    <ul class="nav-list">
+      <li class="nav-item" data-page="home">        <span class="nav-icon">🏠</span> Home</li>
+      <li class="nav-item" data-page="health">      <span class="nav-icon">💛</span> Health Score</li>
+      <li class="nav-item" data-page="mood">        <span class="nav-icon">😊</span> Mood Tracker</li>
+      <li class="nav-item" data-page="stress">      <span class="nav-icon">△</span>  Stress Monitor</li>
+      <li class="nav-item" data-page="sleep">       <span class="nav-icon">🌙</span> Sleep Tracker</li>
+      <li class="nav-item" data-page="relaxation">  <span class="nav-icon">🎧</span> Relaxation</li>
+      <li class="nav-item" data-page="analytics">   <span class="nav-icon">📊</span> Analytics</li>
+      <li class="nav-item" data-page="journal">     <span class="nav-icon">📖</span> Journal</li>
+      <li class="nav-item" data-page="emergency">   <span class="nav-icon">🆘</span> Emergency</li>
+      <li class="nav-item" data-page="profile">     <span class="nav-icon">👤</span> Profile</li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-label">Light Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <iframe id="content-frame" src="pages/home.html" title="Content"></iframe>
+  <div class="toast" id="toast">✓ Saved!</div>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Override toggleTheme to also push theme into the iframe
+    const _origToggle = window.toggleTheme;
+    window.toggleTheme = function() {
+      _origToggle();
+      const t = document.documentElement.getAttribute('data-theme');
+      const f = document.getElementById('content-frame');
+      if (f && f.contentWindow) {
+        f.contentWindow.postMessage({ type: 'theme', theme: t }, '*');
+      }
+    };
+  </script>
+</body>
+</html>

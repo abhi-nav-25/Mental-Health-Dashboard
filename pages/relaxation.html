@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Relaxation — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Exercises & Relaxation</div>
+  <div class="page-subtitle">Guided breathing and meditation tools for stress relief.</div>
+
+  <!-- Breathing -->
+  <div class="card breathing-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div>
+        <div style="font-weight:700;font-size:1rem;">💨 4-4-6-2 Breathing</div>
+        <div style="font-size:0.8rem;color:var(--text3);">Box breathing for anxiety relief</div>
+      </div>
+      <span class="cycles-badge" id="cycleCount">0 cycles</span>
+    </div>
+    <div class="breathing-display">
+      <div class="breath-circle" id="breathCircle">
+        <div class="breath-phase" id="breathPhase">Inhale</div>
+        <div class="breath-num" id="breathNum">4</div>
+      </div>
+      <div class="breath-instruction" id="breathInstruction">Breathe in slowly through your nose...</div>
+      <div class="breath-progress"><div class="breath-prog-fill" id="breathProg"></div></div>
+      <div class="breath-controls">
+        <button class="btn" id="breathBtn" onclick="toggleBreath()">▶ Start</button>
+        <button class="btn btn-ghost" onclick="resetBreath()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meditation Sessions -->
+  <h3 style="margin: 24px 0 12px;">Meditation Sessions</h3>
+  <div class="meditation-grid">
+    <div class="med-card"><div class="med-icon">🌿</div><div class="med-title">Quick Calm</div><div class="med-duration">5 min</div><div class="med-desc">A 5-minute grounding session to reset your mind.</div></div>
+    <div class="med-card"><div class="med-icon">🧘</div><div class="med-title">Body Scan</div><div class="med-duration">10 min</div><div class="med-desc">Scan your body from head to toe for tension release.</div></div>
+    <div class="med-card"><div class="med-icon">🌊</div><div class="med-title">Deep Relax</div><div class="med-duration">15 min</div><div class="med-desc">Full relaxation with guided breathing and awareness.</div></div>
+    <div class="med-card"><div class="med-icon">🌙</div><div class="med-title">Sleep Prep</div><div class="med-duration">20 min</div><div class="med-desc">Gentle session to prepare mind and body for sleep.</div></div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activity-grid" style="margin-top:4px;">
+    <div class="activity-card"><div class="act-icon">🚶</div><div class="act-title">10-Min Walk</div><div class="act-desc">A short walk outside boosts endorphins and clears your mind instantly.</div></div>
+    <div class="activity-card"><div class="act-icon">📖</div><div class="act-title">Mindful Reading</div><div class="act-desc">Read something positive for 10 minutes to shift your focus.</div></div>
+    <div class="activity-card"><div class="act-icon">🎵</div><div class="act-title">Music Therapy</div><div class="act-desc">Listen to calming music — 432 Hz frequencies promote relaxation.</div></div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    applyTheme();
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+  </script>
+</body>
+</html>

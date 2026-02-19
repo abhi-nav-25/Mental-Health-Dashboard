@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home — CARE.IO</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <div class="hero-banner">
+    <div class="hero-greeting">Good Evening 👋</div>
+    <div class="hero-name" id="heroName">Friend</div>
+    <div class="hero-desc">How are you feeling today? Your mental wellbeing matters — take a moment to check in with yourself.</div>
+    <div class="hero-status">
+      <div class="dot-green"></div>
+      <span id="heroDate">Dashboard active</span>
+    </div>
+  </div>
+
+  <div class="grid-4 gap-20">
+    <div class="card stat-card">
+      <div class="stat-icon icon-teal">💛</div>
+      <div class="stat-label">Health Score</div>
+      <div class="stat-value" id="homeHealthScore">—</div>
+      <div class="stat-sub">Today's score</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-icon icon-purple">😊</div>
+      <div class="stat-label">Current Mood</div>
+      <div class="stat-value" style="font-size:1.1rem;margin-top:4px;" id="homeMood">Not set</div>
+      <div class="stat-sub">Last recorded</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-icon icon-blue">🌙</div>
+      <div class="stat-label">Sleep</div>
+      <div class="stat-value" id="homeSleep">—h</div>
+      <div class="stat-sub">Last night</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-icon icon-orange">📈</div>
+      <div class="stat-label">Stress Level</div>
+      <div class="stat-value" id="homeStress">—/10</div>
+      <div class="stat-sub">Current level</div>
+    </div>
+  </div>
+
+  <div class="inspiration-card" style="margin-top:20px;">
+    <div class="quote-icon">❝</div>
+    <div>
+      <div class="quote-label">Daily Inspiration</div>
+      <div class="quote-text" id="quoteText">"It's okay to ask for help. Reaching out is a sign of strength, not weakness."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="bottom-stats">
+      <div class="bottom-stat">
+        <div class="bottom-stat-num">0</div>
+        <div class="bottom-stat-label">Meditation Sessions</div>
+        <div class="bottom-stat-sub">this week</div>
+      </div>
+      <div class="bottom-stat">
+        <div class="bottom-stat-num" id="homeJournalCount">0</div>
+        <div class="bottom-stat-label">Journal Entries</div>
+        <div class="bottom-stat-sub">total entries</div>
+      </div>
+      <div class="bottom-stat">
+        <div class="bottom-stat-num">1</div>
+        <div class="bottom-stat-label">Wellness Streak</div>
+        <div class="bottom-stat-sub">days active</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const quotes = [
+      '"It\'s okay to ask for help. Reaching out is a sign of strength, not weakness."',
+      '"You don\'t have to be positive all the time. It\'s perfectly okay to feel sad, angry, annoyed, or anxious."',
+      '"Self-care is not self-indulgence, it is self-preservation."',
+      '"You are enough, just as you are."',
+      '"Mental health is not a destination, but a process."'
+    ];
+
+    function retrieve(key, fallback = null) {
+      try { const v = localStorage.getItem('careio-' + key); return v !== null ? JSON.parse(v) : fallback; } catch(e) { return fallback; }
+    }
+
+    function applyTheme() {
+      const theme = retrieve('careio-theme') || window.parent?.document?.documentElement?.getAttribute('data-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      applyTheme();
+
+      // Date
+      const now = new Date();
+      document.getElementById('heroDate').textContent = `Dashboard active · ${now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}`;
+
+      // Profile name
+      const profile = retrieve('profile', {});
+      if (profile.name) { document.getElementById('heroName').textContent = profile.name; document.getElementById('profileAvatarBig') && (document.getElementById('profileAvatarBig').textContent = profile.avatar || '😊'); }
+
+      // Stats from storage
+      const health = retrieve('healthScore', {});
+      const mood   = retrieve('mood', {});
+      const sleep  = retrieve('sleep', {});
+      const stress = retrieve('stress', {});
+      const journal = retrieve('journalEntries', []);
+
+      if (health.score) document.getElementById('homeHealthScore').textContent = health.score;
+      if (mood.mood)    document.getElementById('homeMood').textContent = mood.mood;
+      if (sleep.hours)  document.getElementById('homeSleep').textContent = sleep.hours + 'h';
+      if (stress.level) document.getElementById('homeStress').textContent = stress.level + '/10';
+      document.getElementById('homeJournalCount').textContent = journal.length;
+
+      // Random quote
+      document.getElementById('quoteText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    });
+
+    // Listen for theme changes from parent
+    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+  </script>
+</body>
+</html>
