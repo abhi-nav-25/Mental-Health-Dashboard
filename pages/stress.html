@@ -6,34 +6,43 @@
   <link rel="stylesheet" href="../css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
   <style>
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; margin:0; overflow-y:auto; }
   </style>
 </head>
 <body>
 
+  <div class="page-container">
+
   <div class="page-title">Stress & Anxiety Monitor</div>
   <div class="page-subtitle">Rate your current stress level and identify symptoms.</div>
 
-  <div class="grid-2 gap-20" style="margin-bottom:20px;">
+  <div class="grid-2 gap-20">
+
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <h3 style="margin:0;">Current Stress Level</h3>
         <span style="background:rgba(74,222,128,0.15);color:#4ade80;padding:4px 10px;border-radius:8px;font-size:0.82rem;font-weight:700;" id="stressScore">● 3/10</span>
       </div>
+
       <div class="stress-display">
         <div class="stress-emoji" id="stressEmoji">😌</div>
         <div class="stress-label-text" id="stressLabelText">Mild</div>
       </div>
+
       <div class="stress-slider-row">
         <span style="font-size:0.75rem;color:var(--text3);">1</span>
         <input type="range" min="1" max="10" value="3" id="stressSlider" style="flex:1;">
         <span style="font-size:0.75rem;color:var(--text3);">10</span>
       </div>
-      <div class="stress-range"><span>Very Calm</span><span>Extreme</span></div>
+
+      <div class="stress-range">
+        <span>Very Calm</span><span>Extreme</span>
+      </div>
     </div>
 
     <div class="card">
       <h3>Symptoms Experienced</h3>
+
       <div class="symptoms-wrap">
         <span class="symptom-tag" onclick="toggleSymptom(this)">Racing thoughts</span>
         <span class="symptom-tag" onclick="toggleSymptom(this)">Muscle tension</span>
@@ -44,12 +53,15 @@
         <span class="symptom-tag" onclick="toggleSymptom(this)">Loss of appetite</span>
         <span class="symptom-tag" onclick="toggleSymptom(this)">Withdrawal</span>
       </div>
-      <br>
-      <button class="btn" onclick="saveStress()">Save Entry</button>
+
+      <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+        <button class="btn" onclick="saveStress()">Save Entry</button>
+      </div>
     </div>
+
   </div>
 
-  <div class="card gap-20" style="margin-bottom:20px;">
+  <div class="card gap-20">
     <h3>Weekly Stress Trend</h3>
     <div class="chart-wrap">
       <canvas id="stressChart"></canvas>
@@ -69,12 +81,14 @@
 
   <div class="toast" id="toast"></div>
 
+  </div>
+
   <script src="../js/app.js"></script>
   <script>
-    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    function applyTheme(){document.documentElement.setAttribute('data-theme',localStorage.getItem('careio-theme')||window.parent?.document?.documentElement?.getAttribute('data-theme')||'dark');}
     applyTheme();
-    window.addEventListener('message', e => { if (e.data?.type === 'theme') { document.documentElement.setAttribute('data-theme', e.data.theme); drawStressChart(); } });
-    window.addEventListener('DOMContentLoaded', initStressMonitor);
+    window.addEventListener('message',e=>{if(e.data?.type==='theme'){document.documentElement.setAttribute('data-theme',e.data.theme);if(typeof drawStressChart==='function')drawStressChart();}});
+    window.addEventListener('DOMContentLoaded',()=>{if(typeof initStressMonitor==='function')initStressMonitor();});
   </script>
 </body>
 </html>

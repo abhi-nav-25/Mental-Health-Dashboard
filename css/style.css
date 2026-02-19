@@ -37,6 +37,26 @@
   --nav-active:   rgba(0,180,170,0.1);
 }
 
+/* ============================================================
+   HEALTH SLIDERS - WHITE IN DARK MODE
+   ============================================================ */
+
+:root[data-theme="dark"] input[type=range] {
+  background: #ffffff;
+}
+
+:root[data-theme="dark"] input[type=range]::-webkit-slider-thumb {
+  background: #ffffff;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+}
+
+:root[data-theme="dark"] input[type=range]::-moz-range-thumb {
+  background: #ffffff;
+  border: 2px solid var(--accent);
+}
+
+
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 15px; }
@@ -75,13 +95,17 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .logo-icon {
-  width: 34px; height: 34px;
+  width: 40px; height: 40px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 17px;
+  font-size: 20px;
 }
-.logo-text { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; }
+.logo-text {
+  font-weight: 900;
+  font-size: 1.6rem;
+  letter-spacing: 1.2px;
+}
 .nav-list { list-style: none; padding: 12px 10px; flex: 1; overflow-y: auto; }
 .nav-item {
   display: flex; align-items: center; gap: 12px;
@@ -302,11 +326,42 @@ label { font-size: 0.82rem; color: var(--text3); margin-bottom: 6px; display: bl
 .quote-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); font-weight: 600; margin-bottom: 8px; }
 .quote-text  { font-style: italic; color: var(--text); font-size: 0.95rem; line-height: 1.5; }
 
-.bottom-stats      { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.bottom-stat       { text-align: center; }
-.bottom-stat-num   { font-size: 2rem; font-weight: 700; color: var(--accent); }
-.bottom-stat-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.bottom-stat-sub   { font-size: 0.78rem; color: var(--text2); }
+/* ============================================================
+   BOTTOM STATS (CENTERED DASHBOARD STYLE)
+   ============================================================ */
+
+.bottom-stats-card {
+  padding: 40px 20px;
+  margin-top: 20px;
+}
+
+.bottom-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  width: 100%;
+}
+
+.bottom-stat {
+  text-align: center;
+  min-width: 140px;
+}
+
+.bottom-stat-num {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+@media (max-width: 768px) {
+  .bottom-stats {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
 
 /* ============================================================
    HEALTH SCORE PAGE
@@ -597,3 +652,69 @@ label { font-size: 0.82rem; color: var(--text3); margin-bottom: 6px; display: bl
   transition: all 0.3s; pointer-events: none; z-index: 9999;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   FIXED LAYOUT CONTAINERS
+   ============================================================ */
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 36px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.analytics-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 36px 100px 36px;  /* extra bottom space */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.emergency-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 36px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.health-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 36px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 36px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.journal-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mood-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* ============================================================
+   GRADIENT LOGO
+   ============================================================ */
+
+.gradient-logo{
+  background: linear-gradient(135deg,var(--accent2),var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

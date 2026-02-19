@@ -4,56 +4,122 @@
   <meta charset="UTF-8">
   <title>Journal — CARE.IO</title>
   <link rel="stylesheet" href="../css/style.css">
+
   <style>
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      margin: 0;
+      overflow-y: auto;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="page-title">Daily Journal</div>
-  <div class="page-subtitle">Write freely — your entries are saved locally and privately.</div>
+  <div class="page-container">
 
-  <div class="card" style="margin-bottom:20px;">
-    <div class="journal-header">
-      <div>
-        <div style="font-weight:600;">New Entry</div>
-        <div class="journal-date" id="journalTodayDate">Thursday, February 19</div>
+    <div class="page-title">Daily Journal</div>
+    <div class="page-subtitle">
+      Write freely — your entries are saved locally and privately.
+    </div>
+
+    <!-- NEW ENTRY -->
+    <div class="card gap-24">
+
+      <div class="journal-header">
+        <div>
+          <div style="font-weight:600;">New Entry</div>
+          <div class="journal-date" id="journalTodayDate">
+            Thursday, February 19
+          </div>
+        </div>
+
+        <div class="mood-emojis" id="journalMoods">
+          <span onclick="selectJournalMood(this)">😄</span>
+          <span onclick="selectJournalMood(this)">🙂</span>
+          <span onclick="selectJournalMood(this)">😐</span>
+          <span onclick="selectJournalMood(this)">😔</span>
+          <span onclick="selectJournalMood(this)">😰</span>
+          <span onclick="selectJournalMood(this)">😤</span>
+          <span onclick="selectJournalMood(this)">🥱</span>
+        </div>
       </div>
-      <div class="mood-emojis" id="journalMoods">
-        <span onclick="selectJournalMood(this)">😄</span>
-        <span onclick="selectJournalMood(this)">🙂</span>
-        <span onclick="selectJournalMood(this)">😐</span>
-        <span onclick="selectJournalMood(this)">😔</span>
-        <span onclick="selectJournalMood(this)">😰</span>
-        <span onclick="selectJournalMood(this)">😤</span>
-        <span onclick="selectJournalMood(this)">🥱</span>
+
+      <input
+        class="journal-title-input"
+        placeholder="Entry title (optional)"
+        id="journalTitle"
+      >
+
+      <textarea
+        style="height:120px; line-height:1.6;"
+        id="journalBody"
+        placeholder="What's on your mind today? Write freely — no judgment here..."
+      ></textarea>
+
+      <span class="journal-prompt" onclick="setJournalPrompt()">
+        ✦ Need inspiration? Try a prompt
+      </span>
+
+      <div class="journal-actions">
+        <button class="btn" onclick="saveJournal()">
+          💾 Save Entry
+        </button>
       </div>
     </div>
-    <input class="journal-title-input" placeholder="Entry title (optional)" id="journalTitle">
-    <textarea style="height:120px;line-height:1.6;" id="journalBody" placeholder="What's on your mind today? Write freely — no judgment here..."></textarea>
-    <span class="journal-prompt" onclick="setJournalPrompt()">✦ Need inspiration? Try a prompt</span>
-    <br>
-    <button class="btn" onclick="saveJournal()">💾 Save Entry</button>
-  </div>
 
-  <div class="card" id="journalList">
-    <div class="journal-empty">
-      <div class="journal-empty-icon">📖</div>
-      <div class="journal-empty-text">No entries yet<br>Write your first journal entry above</div>
+    <!-- ENTRY LIST -->
+    <div class="card gap-24" id="journalList">
+
+      <div class="journal-empty">
+        <div class="journal-empty-icon">📖</div>
+        <div class="journal-empty-text">
+          No entries yet<br>
+          Write your first journal entry above
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
+
+  </div>
 
   <script src="../js/app.js"></script>
+
   <script>
-    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    function applyTheme() {
+      const theme =
+        localStorage.getItem('careio-theme') ||
+        window.parent?.document?.documentElement?.getAttribute('data-theme') ||
+        'dark';
+
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
     applyTheme();
-    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+
+    window.addEventListener('message', e => {
+      if (e.data?.type === 'theme') {
+        document.documentElement.setAttribute('data-theme', e.data.theme);
+      }
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('journalTodayDate').textContent = new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
-      initJournal();
+      document.getElementById('journalTodayDate').textContent =
+        new Date().toLocaleDateString('en-US', {
+          weekday:'long',
+          month:'long',
+          day:'numeric'
+        });
+
+      if (typeof initJournal === 'function') {
+        initJournal();
+      }
     });
   </script>
+
 </body>
 </html>

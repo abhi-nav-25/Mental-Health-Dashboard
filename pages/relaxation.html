@@ -5,10 +5,12 @@
   <title>Relaxation — CARE.IO</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 32px 36px; overflow-y: auto; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; margin:0; overflow-y:auto; }
   </style>
 </head>
 <body>
+
+  <div class="page-container">
 
   <div class="page-title">Exercises & Relaxation</div>
   <div class="page-subtitle">Guided breathing and meditation tools for stress relief.</div>
@@ -37,7 +39,7 @@
   </div>
 
   <!-- Meditation Sessions -->
-  <h3 style="margin: 24px 0 12px;">Meditation Sessions</h3>
+  <h3 style="margin:24px 0 12px;">Meditation Sessions</h3>
   <div class="meditation-grid">
     <div class="med-card"><div class="med-icon">🌿</div><div class="med-title">Quick Calm</div><div class="med-duration">5 min</div><div class="med-desc">A 5-minute grounding session to reset your mind.</div></div>
     <div class="med-card"><div class="med-icon">🧘</div><div class="med-title">Body Scan</div><div class="med-duration">10 min</div><div class="med-desc">Scan your body from head to toe for tension release.</div></div>
@@ -52,11 +54,13 @@
     <div class="activity-card"><div class="act-icon">🎵</div><div class="act-title">Music Therapy</div><div class="act-desc">Listen to calming music — 432 Hz frequencies promote relaxation.</div></div>
   </div>
 
+  </div>
+
   <script src="../js/app.js"></script>
   <script>
-    function applyTheme() { document.documentElement.setAttribute('data-theme', localStorage.getItem('careio-theme') || 'dark'); }
+    function applyTheme(){document.documentElement.setAttribute('data-theme',localStorage.getItem('careio-theme')||window.parent?.document?.documentElement?.getAttribute('data-theme')||'dark');}
     applyTheme();
-    window.addEventListener('message', e => { if (e.data?.type === 'theme') document.documentElement.setAttribute('data-theme', e.data.theme); });
+    window.addEventListener('message',e=>{if(e.data?.type==='theme')document.documentElement.setAttribute('data-theme',e.data.theme);});
   </script>
 </body>
 </html>
