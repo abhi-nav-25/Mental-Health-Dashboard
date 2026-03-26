@@ -269,128 +269,266 @@ function drawStressChart() {
 /* ============================================================
    SLEEP TRACKER
    ============================================================ */
-function initSleepTracker() {
-  const slider = document.getElementById('sleepDurationSlider');
-  if (slider) {
-    slider.addEventListener('input', function() {
-      const v = parseInt(this.value);
-      document.getElementById('sleepHours').textContent = v + 'h';
-      const lbl = document.querySelector('.sleep-quality-lbl');
-      if (lbl) lbl.textContent = v >= 7 && v <= 9 ? 'Good Sleep 😊' : v < 7 ? 'Short Sleep ⚠️' : 'Long Sleep 😴';
-    });
+/* ================= STORAGE HELPERS ================= */
+
+function store(key, value) {
+  localStorage.setItem('careio-' + key, JSON.stringify(value));
+}
+
+function retrieve(key, fallback = []) {
+  try {
+    const v = localStorage.getItem('careio-' + key);
+    return v !== null ? JSON.parse(v) : fallback;
+  } catch (e) {
+    return fallback;
   }
-  document.querySelectorAll('.quality-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('selected'));
-      this.classList.add('selected');
-    });
+}
+
+/* ================= TOAST ================= */
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+
+  t.textContent = msg;
+  t.classList.add('show');
+
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ================= GLOBAL ================= */
+
+let editingSleepDate = null;
+let sleepChart = null;
+
+/* ================= TIP ================= */
+
+function updateSleepTip(hours) {
+  const tip = document.getElementById('sleepTip');
+  if (!tip) return;
+
+  if (hours >= 7 && hours <= 9) {
+    tip.textContent = "Great job! You slept well today 🌟";
+  } 
+  else if (hours < 7) {
+    tip.textContent = "Sleep wasn’t enough today — try going to bed earlier 🌙";
+  } 
+  else {
+    tip.textContent = "You slept longer — hope you feel refreshed 😴";
+  }
+}
+
+/* ================= TIME → HOURS ================= */
+
+function calculateSleepHours(bedtime, wakeup) {
+  if (!bedtime || !wakeup) return null;
+
+  const [bh, bm] = bedtime.split(':').map(Number);
+  const [wh, wm] = wakeup.split(':').map(Number);
+
+  const bedMinutes  = bh * 60 + bm;
+  const wakeMinutes = wh * 60 + wm;
+
+  let diff = wakeMinutes - bedMinutes;
+
+  if (diff < 0) diff += 24 * 60;
+
+  return Math.round(diff / 60);
+}
+
+/* ================= INIT TIME LISTENERS ================= */
+
+function initTimeInputs() {
+  const timeInputs = document.querySelectorAll('input[type="time"]');
+
+  if (timeInputs.length < 2) return;
+
+  const bedtimeInput = timeInputs[0];
+  const wakeupInput  = timeInputs[1];
+
+  function updateFromTime() {
+    const bedtime = bedtimeInput.value;
+    const wakeup  = wakeupInput.value;
+
+    const hours = calculateSleepHours(bedtime, wakeup);
+
+    if (hours !== null) {
+      const slider = document.getElementById('sleepDurationSlider');
+
+      // 🔥 FORCE OVERRIDE slider
+      slider.value = hours;
+
+      document.getElementById('sleepHours').textContent = hours + 'h';
+
+      updateSleepTip(hours);
+    }
+  }
+
+  bedtimeInput.addEventListener('change', updateFromTime);
+  wakeupInput.addEventListener('change', updateFromTime);
+}
+
+/* ================= SAVE ================= */
+
+function saveSleep() {
+  const dateToSave =
+    editingSleepDate || new Date().toISOString().split('T')[0];
+
+  const hours = parseInt(
+    document.getElementById('sleepDurationSlider').value
+  );
+
+  const timeInputs = document.querySelectorAll('input[type="time"]');
+  const bedtime = timeInputs[0]?.value || "";
+  const wakeup  = timeInputs[1]?.value || "";
+
+  let history = retrieve('sleepHistory', []);
+
+  history = history.filter(e => e.date !== dateToSave);
+
+  history.push({
+    date: dateToSave,
+    hours,
+    bedtime,
+    wakeup
   });
+
+  store('sleepHistory', history);
+  store('sleep', { hours, bedtime, wakeup });
+
+  editingSleepDate = null;
+
+  updateSleepTip(hours);
+  showToast('✓ Sleep saved!');
+
   drawSleepChart();
 }
 
-function saveSleep() {
-  const h = document.getElementById('sleepDurationSlider')?.value || 7;
-  const q = document.querySelector('.quality-btn.selected')?.textContent?.trim() || '';
-  store('sleep', { hours: h, quality: q, ts: Date.now() });
-  showToast('✓ Sleep log saved!');
-}
+/* ================= GRAPH ================= */
 
-let sleepChart = null;
 function drawSleepChart() {
   const ctx = document.getElementById('sleepChart');
   if (!ctx) return;
-  const isDark = root.getAttribute('data-theme') === 'dark';
-  const gc = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-  const tc = isDark ? '#8b949e' : '#718096';
+
+  let history = retrieve('sleepHistory', []);
+
+  // 🔥 ensure full week with dummy data
+  if (history.length < 7) {
+    const today = new Date();
+    const fullWeek = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+
+      const dateStr = d.toISOString().split('T')[0];
+      const existing = history.find(e => e.date === dateStr);
+
+      fullWeek.push(
+        existing || {
+          date: dateStr,
+          hours: Math.floor(Math.random() * 4) + 6,
+          bedtime: "23:00",
+          wakeup: "07:00"
+        }
+      );
+    }
+
+    history = fullWeek;
+  }
+
+  history.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const labels = history.map(e =>
+    new Date(e.date).toLocaleDateString('en-US', {
+      weekday: 'short'
+    })
+  );
+
+  const data = history.map(e => e.hours);
+
   if (sleepChart) sleepChart.destroy();
+
   sleepChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      labels,
       datasets: [{
-        data: [7,6,8,7,6,9,7],
+        data,
         backgroundColor: 'rgba(96,165,250,0.6)',
         borderColor: '#60a5fa',
-        borderWidth: 1, borderRadius: 6
+        borderWidth: 1,
+        borderRadius: 6
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const entry = history[ctx.dataIndex];
+
+              let text = ctx.raw + ' hrs sleep';
+
+              if (entry.bedtime && entry.wakeup) {
+                text += ' | ' + entry.bedtime + ' → ' + entry.wakeup;
+              }
+
+              return text;
+            }
+          }
+        }
+      },
+
       scales: {
-        y: { min:0, max:12, grid:{color:gc}, ticks:{color:tc} },
-        x: { grid:{display:false}, ticks:{color:tc} }
+        y: {
+          min: 0,
+          max: 12,
+          ticks: { stepSize: 2 }
+        },
+        x: {
+          grid: { display: false }
+        }
+      },
+
+      onClick: (evt, elements) => {
+        if (!elements.length) return;
+
+        const index = elements[0].index;
+        const entry = history[index];
+
+        editSleepEntry(entry);
       }
     }
   });
 }
 
-/* ============================================================
-   BREATHING / RELAXATION
-   ============================================================ */
-let breathRunning = false;
-let breathTimer = null;
-let breathCountdown = null;
-let breathCycles = 0;
-let breathStep = 0;
+/* ================= EDIT ================= */
 
-const breathSequence = [
-  { phase:'Inhale', num:4, instruction:'Breathe in slowly through your nose...', state:'expand', duration:4000 },
-  { phase:'Hold',   num:4, instruction:'Hold your breath gently...',               state:'hold',   duration:4000 },
-  { phase:'Exhale', num:6, instruction:'Breathe out slowly through your mouth...', state:'',       duration:6000 },
-  { phase:'Rest',   num:2, instruction:'Rest and prepare for next cycle...',        state:'',       duration:2000 }
-];
+function editSleepEntry(entry) {
+  editingSleepDate = entry.date;
 
-function toggleBreath() {
-  breathRunning = !breathRunning;
-  document.getElementById('breathBtn').textContent = breathRunning ? '⏸ Pause' : '▶ Resume';
-  if (breathRunning) runBreath();
-  else { clearTimeout(breathTimer); clearInterval(breathCountdown); }
+  document.getElementById('sleepDurationSlider').value = entry.hours;
+  document.getElementById('sleepHours').textContent = entry.hours + 'h';
+
+  const timeInputs = document.querySelectorAll('input[type="time"]');
+  if (entry.bedtime) timeInputs[0].value = entry.bedtime;
+  if (entry.wakeup)  timeInputs[1].value = entry.wakeup;
+
+  updateSleepTip(entry.hours);
+
+  showToast("Editing " + entry.date);
 }
 
-function runBreath() {
-  if (!breathRunning) return;
-  const s = breathSequence[breathStep];
-  document.getElementById('breathPhase').textContent       = s.phase;
-  document.getElementById('breathNum').textContent         = s.num;
-  document.getElementById('breathInstruction').textContent = s.instruction;
-  document.getElementById('breathCircle').className        = 'breath-circle ' + s.state;
+/* ================= INIT ================= */
 
-  let countVal = s.num;
-  clearInterval(breathCountdown);
-  breathCountdown = setInterval(() => {
-    countVal--;
-    if (countVal > 0) document.getElementById('breathNum').textContent = countVal;
-  }, 1000);
-
-  const prog = document.getElementById('breathProg');
-  prog.style.transition = 'none'; prog.style.width = '0%';
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    prog.style.transition = `width ${s.duration}ms linear`;
-    prog.style.width = '100%';
-  }));
-
-  breathTimer = setTimeout(() => {
-    breathStep = (breathStep + 1) % breathSequence.length;
-    if (breathStep === 0) {
-      breathCycles++;
-      document.getElementById('cycleCount').textContent = breathCycles + ' cycle' + (breathCycles > 1 ? 's' : '');
-    }
-    runBreath();
-  }, s.duration);
-}
-
-function resetBreath() {
-  breathRunning = false;
-  clearTimeout(breathTimer); clearInterval(breathCountdown);
-  breathStep = 0; breathCycles = 0;
-  document.getElementById('breathBtn').textContent         = '▶ Start';
-  document.getElementById('breathPhase').textContent       = 'Inhale';
-  document.getElementById('breathNum').textContent         = '4';
-  document.getElementById('breathInstruction').textContent = 'Breathe in slowly through your nose...';
-  document.getElementById('breathCircle').className        = 'breath-circle';
-  document.getElementById('cycleCount').textContent        = '0 cycles';
-  document.getElementById('breathProg').style.width        = '0%';
+function initSleepTracker() {
+  initTimeInputs();
+  drawSleepChart();
 }
 
 /* ============================================================
@@ -398,12 +536,10 @@ function resetBreath() {
    ============================================================ */
 let analyticsLineChart = null;
 let analyticsRadarChart = null;
-
 function initAnalytics() {
   drawAnalyticsLine();
   drawAnalyticsRadar();
 }
-
 function drawAnalyticsLine() {
   const ctx = document.getElementById('analyticsChart');
   if (!ctx) return;
@@ -469,7 +605,6 @@ function drawAnalyticsRadar() {
    JOURNAL
    ============================================================ */
 let journalEntries = [];
-
 const journalPrompts = [
   "What's one thing you're grateful for today?",
   "Describe a moment today that made you smile.",
@@ -477,7 +612,6 @@ const journalPrompts = [
   "What are three words that describe your current feelings?",
   "What do you need more of in your life right now?"
 ];
-
 function initJournal() {
   journalEntries = retrieve('journalEntries', []);
   renderJournalList();

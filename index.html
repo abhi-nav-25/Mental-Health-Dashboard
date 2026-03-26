@@ -12,7 +12,12 @@
       background: var(--bg);
     }
   </style>
+  <script>
+    const savedTheme = localStorage.getItem('careio-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -43,6 +48,13 @@
   <div class="toast" id="toast">✓ Saved!</div>
 
   <script src="js/app.js"></script>
+  <script>
+  // 🔥 APPLY SAVED THEME ON LOAD (FIX)
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem('careio-theme') || 'dark';
+    applyTheme(savedTheme);
+  });
+</script>
   <script>
     // Override toggleTheme to also push theme into the iframe
     const _origToggle = window.toggleTheme;
