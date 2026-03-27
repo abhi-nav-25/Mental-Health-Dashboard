@@ -900,6 +900,16 @@ function saveJournal() {
   showToast('✓ Journal entry saved!');
 }
 
+function deleteJournal(index) {
+  // remove entry
+  journalEntries.splice(index, 1);
+  // update localStorage
+  localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+  // re-render list
+  renderJournalList();
+  showToast("Entry deleted 🗑");
+}
+
 function renderJournalList() {
   const list = document.getElementById('journalList');
   if (!list) return;
@@ -911,17 +921,19 @@ function renderJournalList() {
       </div>`;
     return;
   }
-  list.innerHTML = journalEntries.map(e => `
+  list.innerHTML = journalEntries.map((e, i) => `
     <div class="journal-entry">
       <div class="journal-entry-header">
         <span style="font-size:1.2rem;">${e.mood}</span>
-        <div>
+        <div style="flex:1;">
           <div class="journal-entry-title">${e.title}</div>
           <div class="journal-entry-date">${e.date}</div>
         </div>
-      </div>
+        <button class="journal-delete-btn" onclick="deleteJournal(${i})">❌</button>
+        </div>
       <div class="journal-entry-body">${e.body}</div>
-    </div>`).join('');
+    </div>
+  `).join('');
 }
 
 /* ============================================================
