@@ -160,44 +160,49 @@ function getRecommendations(score) {
 
   // 🔴 Overall score based
   if (score < 40) {
-    recs.push("⚠️ Your health score is low. Focus on small improvements in daily habits.");
+    recs.push("Focus on small daily habits to gradually improve your well-being.");
+    recs.push("Try building a consistent routine—your body loves predictability.");
   } else if (score < 60) {
-    recs.push("⚡ You're doing okay, but there's room for improvement.");
+    recs.push("You're doing okay, but improving a few habits will boost your energy.");
+    recs.push("Try adjusting one health factor at a time for steady progress.");
   } else if (score < 80) {
-    recs.push("👍 Good job! Maintain consistency to improve further.");
+    recs.push("You're maintaining good habits—just stay consistent.");
+    recs.push("Try exploring mindfulness or journaling to stay balanced.");
   } else {
-    recs.push("🔥 Excellent! Keep up your healthy lifestyle.");
+    recs.push("Excellent score! Keep up your healthy lifestyle.");
+    recs.push("Challenge yourself with new goals like regular workouts or balanced meals.");
   }
 
-  // 🧩 Factor-specific tips
-  if (sleep < 5) {
-    recs.push("😴 Improve sleep: aim for 7–8 hours and fix your sleep schedule.");
+  // 🟦 Sleep Recommendations
+  if (sleep < 7) {
+    recs.push("Maintain a consistent sleep schedule, even on weekends.");
+    recs.push("Avoid screens 1 hour before bedtime.");
+    recs.push("Keep your room cool, dark, and quiet.");
+    recs.push("Try a short relaxation or breathing exercise before sleep.");
   }
 
-  if (activity < 5) {
-    recs.push("🏃 Increase activity: even 20–30 mins walk helps a lot.");
+  // 🟩 Activity
+  if (activity < 7) {
+    recs.push("Take a 20–30 minute walk every day.");
+    recs.push("Do light stretching or yoga to release stress.");
   }
 
-  if (nutrition < 5) {
-    recs.push("🥗 Focus on balanced meals: add fruits, protein, and hydration.");
+  // 🟧 Nutrition
+  if (nutrition < 7) {
+    recs.push("Add more fruits and vegetables to your meals.");
+    recs.push("Stay hydrated — drink 6–8 glasses of water daily.");
+    recs.push("Avoid caffeine late in the day.");
   }
 
-  if (social < 5) {
-    recs.push("💬 Connect with friends/family — social health matters too.");
-  }
-
-  // 🟡 Medium suggestions (5–7 range)
-  if (sleep >= 5 && sleep < 7) {
-    recs.push("🛌 Try improving sleep quality (less screen time before bed).");
-  }
-
-  if (activity >= 5 && activity < 7) {
-    recs.push("🚶 Try adding light exercise to boost your energy.");
+  // 🟪 Social Health
+  if (social < 7) {
+    recs.push("Spend time with friends or family members.");
+    recs.push("Talk to someone you trust when feeling overwhelmed.");
+    recs.push("Join a group or activity you enjoy.");
   }
 
   return recs;
 }
-
 function updateRecommendations(score) {
   const list = document.getElementById('recommendationList');
   if (!list) return;
@@ -306,14 +311,28 @@ function drawMoodChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          callbacks: {
-            label: function(ctx) {
-              const q = quotes[Math.floor(Math.random()*quotes.length)];
-              const moodName = moodHistory[ctx.dataIndex].mood;
-              return `${moodName} (${ctx.raw}/5)\n${q}`;
-            }
-          }
-        }
+  callbacks: {
+    label: function (ctx) {
+      const entry = moodHistory[ctx.dataIndex];
+      const moodName = entry.mood;
+
+      const moodMessages = {
+        "Happy": "Keep shining! Your joy is contagious ✨",
+        "Content": "A peaceful heart is a strong heart 😊",
+        "Neutral": "A calm mind is a superpower. You're doing fine 🌿",
+        "Sad": "It's okay to feel sad. Better days are coming 💛",
+        "Distressed": "Take a deep breath… you are stronger than this 🤍",
+        "Angry": "It's good to acknowledge your feelings. You got this 💪",
+        "Anxious": "Slow down… breathe… you're safe and capable 🌸",
+        "Tired": "Please rest. Your body deserves kindness 😴"
+      };
+
+      const message = moodMessages[moodName] || "Your feelings are valid.";
+
+      return `${moodName} (${entry.score}/5)\n${message}`;
+    }
+  }
+}
       },
 
       onClick: (evt) => {
