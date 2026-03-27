@@ -28,29 +28,33 @@
 
     <!-- TOP ANALYTICS STATS -->
     <div class="analytics-stats gap-24">
+
+      <!-- Health -->
       <div class="card analytic-stat">
-        <div class="analytic-val">—</div>
+        <div class="analytic-val" id="avgHealth">—</div>
         <div class="analytic-label">/100</div>
         <div class="analytic-sub">Avg Health Score</div>
       </div>
 
+      <!-- Mood -->
       <div class="card analytic-stat">
-        <div class="analytic-val">—</div>
-        <div class="analytic-label">/5</div>
-        <div class="analytic-sub">Avg Mood</div>
+        <div class="analytic-val" id="avgMood">—</div>
+        <div class="analytic-label">Avg Mood</div>
       </div>
 
+      <!-- Meditation -->
       <div class="card analytic-stat">
-        <div class="analytic-val">0</div>
+        <div class="analytic-val" id="totalMeditation">0</div>
         <div class="analytic-label">meditations</div>
         <div class="analytic-sub">Total Sessions</div>
       </div>
 
+      <!-- Journal -->
       <div class="card analytic-stat">
         <div class="analytic-val" id="journalCount">0</div>
-        <div class="analytic-label">entries</div>
-        <div class="analytic-sub">Journal Entries</div>
+        <div class="analytic-label">Journal Entries</div>
       </div>
+
     </div>
 
     <!-- WEEKLY LINE CHART -->
@@ -63,6 +67,7 @@
 
     <!-- RADAR + INSIGHTS -->
     <div class="grid-2 gap-24">
+
       <div class="card">
         <h3>Wellness Profile</h3>
         <div class="chart-wrap" style="height:260px;">
@@ -91,6 +96,7 @@
           </li>
         </ul>
       </div>
+
     </div>
 
   </div>
@@ -117,12 +123,32 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      if (typeof initAnalytics === 'function') initAnalytics();
 
+      // ✅ Health Score
+      const health = retrieve('healthScore');
+      if (health && health.score !== undefined) {
+        document.getElementById('avgHealth').textContent = health.score;
+      }
+
+      // ✅ Mood
+      const moodHistory = retrieve('mood-history', []);
+      if (moodHistory.length > 0) {
+        const latest = moodHistory[moodHistory.length - 1];
+        document.getElementById('avgMood').textContent = latest.mood;
+      }
+
+      // ✅ Meditation Sessions
+      const meditation = retrieve('meditationSessions', 0);
+      document.getElementById('totalMeditation').textContent = meditation;
+
+      // ✅ Journal Entries
       const entries =
         JSON.parse(localStorage.getItem('careio-journalEntries') || '[]');
 
       document.getElementById('journalCount').textContent = entries.length;
+
+      // charts
+      if (typeof initAnalytics === 'function') initAnalytics();
     });
   </script>
 
