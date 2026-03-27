@@ -1,61 +1,194 @@
-# CARE.IO — Mental Wellness App
+# 🧠 CARE.IO — Mental Wellness Dashboard
 
-A fully client-side mental wellness dashboard with dark/light mode, 10 pages, and localStorage persistence.
+CARE.IO is a fully client-side mental wellness dashboard designed to help users track, reflect, and improve their emotional and physical well-being — while keeping all data **private and stored locally**.
+
+---
+
+## 🌟 Overview
+
+CARE.IO provides a simple and engaging way to:
+
+* Track daily mental and physical health
+* Reflect through journaling
+* Practice relaxation techniques
+* Visualize personal wellness trends
+
+No accounts, no backend — just a **fast, private, and accessible experience**.
+
+---
+
+## 🚀 Features
+
+### 🏠 Dashboard (Home)
+
+* Overview of health score, mood, sleep, and stress
+* Daily inspiration quotes
+* Quick activity insights
+
+---
+
+### 💛 Health Score System
+
+* Multi-factor wellness scoring:
+
+  * Sleep
+  * Physical activity
+  * Nutrition
+  * Social connection
+* Donut chart visualization
+* Smart recommendations based on inputs
+
+---
+
+### 😊 Mood Tracker
+
+* Emoji-based mood logging
+* Historical tracking
+* Weekly trend visualization
+
+---
+
+### 📈 Stress Monitor
+
+* Adjustable stress levels
+* Symptom tracking
+* Visual feedback
+
+---
+
+### 🌙 Sleep Tracker
+
+* Track sleep hours and quality
+* Integrated into overall health score
+
+---
+
+### 🧘 Relaxation Hub
+
+* 4-4-6-2 breathing exercise:
+
+  * Animated breathing guide
+  * Countdown timer
+  * Pause / Resume / Reset
+* Meditation session tracking
+* Quick calming activities
+
+---
+
+### 📊 Analytics Dashboard
+
+* Weekly trends (line chart)
+* Wellness radar chart
+* Insight generation
+
+---
+
+### 📖 Journal System
+
+* Private journaling (stored locally)
+* Mood tagging
+* Prompt suggestions
+* Entry management (add/delete)
+
+---
+
+### 👤 Profile & Progress
+
+* Avatar selection
+* Wellness goals
+* Progress tracking:
+
+  * Health score
+  * Journal entries
+  * Meditation sessions
+  * Sleep hours
+
+---
+
+### 🆘 Emergency Support
+
+* Helplines (India, US, UK)
+* Quick access via phone links
+
+---
 
 ## 📁 Project Structure
 
-```
+```id="proj123"
 careio/
 │
-├── index.html              ← Main shell (sidebar + iframe router)
+├── index.html
 ├── css/
-│   └── style.css           ← All styles + CSS variables (dark & light themes)
+│   └── style.css
 ├── js/
-│   └── app.js              ← All JavaScript logic (nav, charts, forms, storage)
+│   └── app.js
 ├── pages/
-│   ├── home.html           ← Dashboard with live stats
-│   ├── health.html         ← Health score with donut chart + sliders
-│   ├── mood.html           ← Mood selector + weekly line chart
-│   ├── stress.html         ← Stress slider + symptoms + chart
-│   ├── sleep.html          ← Sleep duration + quality + bar chart
-│   ├── relaxation.html     ← Animated breathing exercise + meditation cards
-│   ├── analytics.html      ← Line chart + radar chart + insights
-│   ├── journal.html        ← Private journal with localStorage
-│   ├── emergency.html      ← Helplines (India, US, UK) + resources
-│   └── profile.html        ← User profile, avatar, progress, streak
+│   ├── home.html
+│   ├── health.html
+│   ├── mood.html
+│   ├── stress.html
+│   ├── sleep.html
+│   ├── relaxation.html
+│   ├── analytics.html
+│   ├── journal.html
+│   ├── emergency.html
+│   └── profile.html
 └── assets/
-    └── icons/              ← (Add custom icons/images here)
 ```
 
-## 🚀 How to Run
+---
 
-Simply open `index.html` in any modern browser — **no server or build step required**.
+## 🧠 Data Storage
 
-> **Recommended:** Use a local server for best iframe + localStorage behavior:
-> ```bash
-> # Python 3
-> cd careio
-> python -m http.server 8080
-> # Visit: http://localhost:8080
-> ```
-> Or use the **Live Server** extension in VS Code (right-click index.html → Open with Live Server).
+All data is stored using **localStorage**:
 
-## ✨ Features
+* `careio-healthScore`
+* `careio-journalEntries`
+* `careio-mood-history`
+* `careio-stress-history`
+* `careio-sleep`
+* `careio-meditationSessions`
 
-- 🌙 Dark / ☀️ Light mode toggle (persisted in localStorage)
-- 📊 Interactive Chart.js charts — line, bar, donut, radar
-- 💾 All data saved to localStorage (health, mood, stress, sleep, journal, profile)
-- 🧘 Animated 4-4-6-2 breathing exercise with live countdown
-- 📖 Journal with prompt suggestions and mood tagging
-- 🆘 Emergency helplines with real tel: links (India, US, UK)
-- 👤 Profile with avatar picker and progress tracker
+No external servers are used — ensuring complete privacy.
+
+---
+
+## 🎨 UI/UX Highlights
+
+* Dark / Light mode (persistent)
+* Responsive layout
+* Smooth animations
+* Clean and minimal interface
+
+---
 
 ## 🛠 Tech Stack
 
-- Vanilla HTML / CSS / JavaScript (zero frameworks)
-- Chart.js 4.4 via CDN
-- Google Fonts — DM Sans + DM Serif Display
+* HTML, CSS, JavaScript (Vanilla)
+* Chart.js (CDN)
+* localStorage
+* Google Fonts (DM Sans)
 
-## 🎨 Customize
+---
 
-Edit CSS variables in `css/style.css` under `[data-theme="dark"]` and `[data-theme="light"]` to change any color instantly across the whole app.
+## 🚀 How to Run
+
+Open `index.html` directly
+OR run:
+
+```id="run123"
+python -m http.server 8080
+```
+
+---
+
+## 👨‍💻 Authors
+
+* **Abhinav Sharma**
+* **Nandani**
+
+---
+
+## 💡 Tagline
+
+*Track your mind. Improve your life — privately.*
