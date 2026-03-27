@@ -977,3 +977,136 @@ function saveProfile() {
   });
   showToast('✓ Profile saved!');
 }
+
+/* ============================================================
+   RELAXATION
+   ============================================================ */
+let breathRunning = false;
+
+let breathTimer = null;
+let breathCountdown = null;
+let progressInterval = null;
+
+let breathCycles = 0;
+let breathStep = 0;
+
+let countVal = 0;
+
+// progress tracking
+let progressStartTime = 0;
+let progressElapsed = 0;
+let currentDuration = 0;
+
+const breathSequence = [
+  { phase:'Inhale', num:4, instruction:'Breathe in slowly through your nose...', duration:4000 },
+  { phase:'Hold',   num:4, instruction:'Hold your breath gently...',               duration:4000 },
+  { phase:'Exhale', num:6, instruction:'Breathe out slowly through your mouth...', duration:6000 },
+  { phase:'Rest',   num:2, instruction:'Rest and prepare for next cycle...',        duration:2000 }
+];
+
+function toggleBreath() {
+  const btn = document.getElementById('breathBtn');
+  const circle = document.getElementById('breathCircle');
+
+  if (!breathRunning) {
+    // ▶ START / RESUME
+    breathRunning = true;
+    btn.textContent = '⏸ Pause';
+
+    circle.style.animationPlayState = 'running';
+
+    // resume timers correctly
+    progressStartTime = Date.now() - progressElapsed;
+
+    startIntervals();
+
+  } else {
+    // ⏸ PAUSE
+    breathRunning = false;
+    btn.textContent = '▶ Resume';
+
+    circle.style.animationPlayState = 'paused';
+
+    clearTimeout(breathTimer);
+    clearInterval(breathCountdown);
+    clearInterval(progressInterval);
+  }
+}
+
+function startIntervals() {
+  const s = breathSequence[breathStep];
+
+  // only reset UI if fresh start (not resume)
+  if (progressElapsed === 0) {
+    document.getElementById('breathPhase').textContent = s.phase;
+    document.getElementById('breathNum').textContent = s.num;
+    document.getElementById('breathInstruction').textContent = s.instruction;
+
+    countVal = s.num;
+    currentDuration = s.duration;
+    progressStartTime = Date.now();
+  }
+
+  // countdown
+  clearInterval(breathCountdown);
+  breathCountdown = setInterval(() => {
+    countVal--;
+    if (countVal > 0) {
+      document.getElementById('breathNum').textContent = countVal;
+    }
+  }, 1000);
+
+  // progress bar
+  const prog = document.getElementById('breathProg');
+
+  clearInterval(progressInterval);
+  progressInterval = setInterval(() => {
+    const now = Date.now();
+    progressElapsed = now - progressStartTime;
+
+    let percent = (progressElapsed / currentDuration) * 100;
+    if (percent >= 100) percent = 100;
+
+    prog.style.width = percent + "%";
+  }, 16);
+
+  // next phase timer
+  breathTimer = setTimeout(() => {
+    progressElapsed = 0;
+
+    breathStep = (breathStep + 1) % breathSequence.length;
+
+    if (breathStep === 0) {
+      breathCycles++;
+      document.getElementById('cycleCount').textContent =
+        breathCycles + ' cycle' + (breathCycles > 1 ? 's' : '');
+    }
+
+    startIntervals();
+  }, currentDuration - progressElapsed);
+}
+
+function resetBreath() {
+  const circle = document.getElementById('breathCircle');
+
+  clearTimeout(breathTimer);
+  clearInterval(breathCountdown);
+  clearInterval(progressInterval);
+
+  breathRunning = false;
+  breathStep = 0;
+  breathCycles = 0;
+
+  countVal = 0;
+  progressElapsed = 0;
+
+  document.getElementById('breathPhase').textContent = 'Inhale';
+  document.getElementById('breathNum').textContent = '4';
+  document.getElementById('breathInstruction').textContent = 'Breathe in slowly through your nose...';
+  document.getElementById('cycleCount').textContent = '0 cycles';
+  document.getElementById('breathProg').style.width = '0%';
+  document.getElementById('breathBtn').textContent = '▶ Start';
+
+  circle.style.animationPlayState = 'paused';
+  circle.style.transform = 'scale(1)';
+}

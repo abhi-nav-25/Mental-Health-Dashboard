@@ -131,8 +131,8 @@
             </div>
 
             <div class="prog-item">
-              <div class="prog-val">—</div>
-              <div class="prog-label">Sleep Quality</div>
+              <div class="prog-val" id="progSleep">— hrs</div>
+              <div class="prog-label">Sleep Hours</div>
             </div>
           </div>
 
@@ -169,22 +169,18 @@
 
         </div>
 
-        <!-- PRIVACY -->
-        <div class="card border gap-24">
-
-          <div class="privacy-title">🔒 Privacy</div>
-          <div class="privacy-text">
-            All your data is stored locally on your device.
-            Nothing is sent to any server.
-            Your journal entries, health scores, and personal information remain completely private.
-          </div>
-
-        </div>
-
       </div>
 
     </div>
-
+    <!-- PRIVACY -->
+    <div class="card border gap-24">
+      <div class="privacy-title">🔒 Privacy</div>
+        <div class="privacy-text">
+          All your data is stored locally on your device.
+          Nothing is sent to any server.
+          Your journal entries, health scores, and personal information remain completely private.
+        </div>
+      </div>
     <div class="toast" id="toast"></div>
 
   </div>
@@ -217,6 +213,7 @@
 
       const health  = JSON.parse(localStorage.getItem('careio-healthScore') || '{}');
       const journal = JSON.parse(localStorage.getItem('careio-journalEntries') || '[]');
+      const sleep = retrieve('sleep', null);
 
       if (health.score) {
         document.getElementById('progHealth').textContent =
@@ -225,6 +222,8 @@
 
       document.getElementById('progJournal').textContent =
         journal.length + ' entries';
+      
+      document.getElementById('progSleep').textContent = sleep && sleep.hours !== undefined ? sleep.hours + ' hrs' : '—';
     });
   </script>
 

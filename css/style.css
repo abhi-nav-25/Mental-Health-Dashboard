@@ -515,6 +515,33 @@ label { font-size: 0.82rem; color: var(--text3); margin-bottom: 6px; display: bl
 .act-icon   { font-size: 1.6rem; margin-bottom: 8px; }
 .act-title  { font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
 .act-desc   { font-size: 0.75rem; color: var(--text2); line-height: 1.4; }
+/* Breathing animation */
+/* Base */
+.breath-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 16px;
+
+  animation: calmPulse 5s ease-in-out infinite;
+  animation-play-state: paused;
+
+  box-shadow: 0 0 0 15px rgba(0,212,200,0.1),
+              0 0 0 30px rgba(0,212,200,0.05);
+}
+
+@keyframes calmPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
 
 /* ============================================================
    ANALYTICS PAGE
@@ -648,8 +675,11 @@ label { font-size: 0.82rem; color: var(--text3); margin-bottom: 6px; display: bl
 .profile-hero-sub     { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 2px; }
 .profile-hero-badges  { display: flex; gap: 12px; margin-top: 8px; }
 .profile-badge        { font-size: 0.78rem; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 5px; }
-.profile-layout       { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.avatar-grid          { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* 🔥 left smaller, right bigger */
+  gap: 20px;
+}.avatar-grid          { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .avatar-opt {
   width: 38px; height: 38px;
   background: var(--bg3); border: 2px solid var(--border);
