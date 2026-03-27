@@ -426,12 +426,24 @@ function drawStressChart() {
         tooltip: {
           callbacks: {
             label: function (ctx) {
-              const quote =
-                motivationalQuotes[
-                  Math.floor(Math.random() * motivationalQuotes.length)
-                ];
-              return `Stress: ${ctx.raw}/10\n${quote}`;
-            }
+  const level = ctx.raw;
+
+  if (level <= 3) {
+    return `Stress: ${level}/10\nFeeling calm — great job!`;
+  } 
+  else if (level <= 5) {
+    return `Stress: ${level}/10\nYou're doing okay — keep it up.`;
+  } 
+  else if (level <= 7) {
+    return `Stress: ${level}/10\nYou're getting stressed — take a short break.`;
+  } 
+  else if (level <= 9) {
+    return `Stress: ${level}/10\nHigh stress! Please slow down and rest.`;
+  } 
+  else {
+    return `Stress: ${level}/10\n⚠️ Extremely stressed — take a break immediately.`;
+  }
+}
           }
         }
       },
