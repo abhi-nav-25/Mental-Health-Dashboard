@@ -139,6 +139,31 @@
       const journal = retrieve('journalEntries', []);
       document.getElementById('homeJournalCount').textContent = journal.length;
 
+       // ✅ Health Score
+      const health = retrieve('healthScore');
+      if (health && health.score !== undefined) {
+        document.getElementById('homeHealthScore').textContent = health.score;
+      }
+
+      // ✅ Mood
+      const moodHistory = retrieve('mood-history', []);
+      if (moodHistory.length > 0) {
+        const latest = moodHistory[moodHistory.length - 1];
+        document.getElementById('homeMood').textContent = latest.mood;
+      }
+
+      // ✅ Sleep
+      const sleep = retrieve('sleep');
+      if (sleep && sleep.hours !== undefined) {
+        document.getElementById('homeSleep').textContent = sleep.hours + "h";
+      }
+      // ✅ Stress
+      const stressHistory = retrieve('stress-history', []);
+      if (stressHistory.length > 0) {
+        const latest = stressHistory[stressHistory.length - 1];
+        document.getElementById('homeStress').textContent = latest.level + "/10";
+      }
+
       document.getElementById('quoteText').textContent =
         quotes[Math.floor(Math.random() * quotes.length)];
     });

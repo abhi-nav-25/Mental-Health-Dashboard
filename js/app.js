@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
 
   // Highlight active nav item
-  const lastPage = retrieve('lastPage') || 'home';
+  const lastPage = 'home';
   const activeItem = document.querySelector(`.nav-item[data-page="${lastPage}"]`);
   if (activeItem) activeItem.classList.add('active');
   loadPage(lastPage);
@@ -83,6 +83,7 @@ function initHealthScore() {
   document.querySelectorAll('.factor-slider').forEach(sl => {
     sl.addEventListener('input', updateSliders);
   });
+
   drawRing(getCurrentScore());
 }
 
@@ -538,21 +539,6 @@ function drawStressChart() {
 /* ============================================================
    SLEEP TRACKER
    ============================================================ */
-/* ================= STORAGE HELPERS ================= */
-
-function store(key, value) {
-  localStorage.setItem('careio-' + key, JSON.stringify(value));
-}
-
-function retrieve(key, fallback = []) {
-  try {
-    const v = localStorage.getItem('careio-' + key);
-    return v !== null ? JSON.parse(v) : fallback;
-  } catch (e) {
-    return fallback;
-  }
-}
-
 /* ================= TOAST ================= */
 
 function showToast(msg) {

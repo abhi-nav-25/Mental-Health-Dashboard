@@ -66,6 +66,14 @@
         f.contentWindow.postMessage({ type: 'theme', theme: t }, '*');
       }
     };
+    window.addEventListener("message", (e) => {
+      if (e.data?.type === "dataUpdated") {
+        const frame = document.getElementById("content-frame");
+        if (frame.src.includes("home.html")) {
+          frame.contentWindow.location.reload();
+        }
+      }
+    });
   </script>
 </body>
 </html>
