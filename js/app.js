@@ -160,39 +160,39 @@ function getRecommendations(score) {
 
   // 🔴 Overall score based
   if (score < 40) {
-    recs.push("⚠️ Your health score is low. Focus on small improvements in daily habits.");
+    recs.push(" Your health score is LOW. Focus on small improvements in daily habits.");
   } else if (score < 60) {
-    recs.push("⚡ You're doing okay, but there's room for improvement.");
+    recs.push(" You're doing OKAY, but there's room for improvement.");
   } else if (score < 80) {
-    recs.push("👍 Good job! Maintain consistency to improve further.");
+    recs.push(" GOOD JOB! Maintain consistency to improve further.");
   } else {
-    recs.push("🔥 Excellent! Keep up your healthy lifestyle.");
+    recs.push(" EXCELLENT! Keep up your healthy lifestyle.");
   }
 
   // 🧩 Factor-specific tips
   if (sleep < 5) {
-    recs.push("😴 Improve sleep: aim for 7–8 hours and fix your sleep schedule.");
+    recs.push(" Improve sleep: aim for 7–8 hours and fix your sleep schedule.");
   }
 
   if (activity < 5) {
-    recs.push("🏃 Increase activity: even 20–30 mins walk helps a lot.");
+    recs.push(" Increase activity: even 20–30 mins walk helps a lot.");
   }
 
   if (nutrition < 5) {
-    recs.push("🥗 Focus on balanced meals: add fruits, protein, and hydration.");
+    recs.push(" Focus on balanced meals: add fruits, protein, and hydration.");
   }
 
   if (social < 5) {
-    recs.push("💬 Connect with friends/family — social health matters too.");
+    recs.push(" Connect with friends/family — social health matters too.");
   }
 
   // 🟡 Medium suggestions (5–7 range)
   if (sleep >= 5 && sleep < 7) {
-    recs.push("🛌 Try improving sleep quality (less screen time before bed).");
+    recs.push(" Try improving sleep quality (less screen time before bed).");
   }
 
   if (activity >= 5 && activity < 7) {
-    recs.push("🚶 Try adding light exercise to boost your energy.");
+    recs.push(" Try adding light exercise to boost your energy.");
   }
 
   return recs;
@@ -204,8 +204,11 @@ function updateRecommendations(score) {
 
   const recs = getRecommendations(score);
 
-  list.innerHTML = recs.map(r => `<li>${r}</li>`).join('');
-}
+list.innerHTML = `
+  <ul class="insights-list">
+    ${recs.map(r => `<li>✦${r}</li>`).join('')}
+  </ul>
+`;}
 
 /* ============================================================
    MOOD TRACKER
@@ -901,11 +904,11 @@ function saveJournal() {
 }
 
 function deleteJournal(index) {
-  // remove entry
   journalEntries.splice(index, 1);
-  // update localStorage
-  localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-  // re-render list
+
+  // ✅ use same storage method
+  store('journalEntries', journalEntries);
+
   renderJournalList();
   showToast("Entry deleted 🗑");
 }
@@ -1109,4 +1112,20 @@ function resetBreath() {
 
   circle.style.animationPlayState = 'paused';
   circle.style.transform = 'scale(1)';
+}
+
+function logMeditation() {
+  const last = retrieve('lastMeditationTime', 0);
+  const now = Date.now();
+
+  // only allow once every 1 min
+  if (now - last < 60000) return;
+
+  let sessions = retrieve('meditationSessions', 0);
+  sessions++;
+
+  store('meditationSessions', sessions);
+  store('lastMeditationTime', now);
+
+  showToast?.("🧘 Session added!");
 }

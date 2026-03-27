@@ -80,7 +80,7 @@
       <div class="bottom-stats">
 
         <div class="bottom-stat">
-          <div class="bottom-stat-num">0</div>
+          <div class="bottom-stat-num" id="homeMeditation">0</div>
           <div class="bottom-stat-label">Meditation Sessions</div>
           <div class="bottom-stat-sub">this week</div>
         </div>
@@ -163,6 +163,9 @@
         const latest = stressHistory[stressHistory.length - 1];
         document.getElementById('homeStress').textContent = latest.level + "/10";
       }
+      // ✅ Meditation Sessions
+      const meditation = retrieve('meditationSessions', 0);
+      document.getElementById('homeMeditation').textContent = meditation;
 
       document.getElementById('quoteText').textContent =
         quotes[Math.floor(Math.random() * quotes.length)];

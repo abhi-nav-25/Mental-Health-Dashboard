@@ -126,7 +126,7 @@
             </div>
 
             <div class="prog-item">
-              <div class="prog-val">0 sessions</div>
+              <div class="prog-val" id="progMeditation">0 sessions</div>
               <div class="prog-label">Meditation Sessions</div>
             </div>
 
@@ -207,24 +207,29 @@
 
     window.addEventListener('DOMContentLoaded', () => {
 
-      if (typeof initProfile === 'function') {
-        initProfile();
-      }
+  if (typeof initProfile === 'function') {
+    initProfile();
+  }
 
-      const health  = JSON.parse(localStorage.getItem('careio-healthScore') || '{}');
-      const journal = JSON.parse(localStorage.getItem('careio-journalEntries') || '[]');
-      const sleep = retrieve('sleep', null);
+  const health  = JSON.parse(localStorage.getItem('careio-healthScore') || '{}');
+  const journal = JSON.parse(localStorage.getItem('careio-journalEntries') || '[]');
+  const sleep   = retrieve('sleep', null);
+  const meditation = retrieve('meditationSessions', 0);
 
-      if (health.score) {
-        document.getElementById('progHealth').textContent =
-          health.score + '/100';
-      }
+  if (health.score) {
+    document.getElementById('progHealth').textContent =
+      health.score + '/100';
+  }
 
-      document.getElementById('progJournal').textContent =
-        journal.length + ' entries';
-      
-      document.getElementById('progSleep').textContent = sleep && sleep.hours !== undefined ? sleep.hours + ' hrs' : '—';
-    });
+  document.getElementById('progJournal').textContent =
+    journal.length + ' entries';
+
+  document.getElementById('progSleep').textContent =
+    sleep && sleep.hours !== undefined ? sleep.hours + ' hrs' : '—';
+
+  document.getElementById('progMeditation').textContent =
+    meditation + ' session' + (meditation !== 1 ? 's' : '');
+});
   </script>
 
 </body>
