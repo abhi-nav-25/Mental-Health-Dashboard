@@ -27,7 +27,7 @@
     </div>
 
     <!-- SCORE + FACTORS -->
-    <div class="health-layout gap-24">
+    <div class="health-layout">
 
       <!-- SCORE CARD -->
       <div class="card">
@@ -55,8 +55,7 @@
 
       <!-- FACTORS CARD -->
       <div class="card">
-        <h3>Wellness Factors</h3>
-
+        <h2>Wellness Factors</h2><br>
         <div class="factor-row">
           <span class="factor-name">Sleep Quality</span>
           <div class="slider-container">
@@ -105,6 +104,11 @@
       <button class="btn" onclick="saveHealth()">
         💾 Save Score
       </button>
+    </div>
+    <!-- RECOMMENDATIONS -->
+    <div class="card gap-24">
+      <h3>💡 Recommendations</h3>
+      <ul id="recommendationList" class="recommendation-list"></ul>
     </div>
 
     <div class="toast" id="toast"></div>

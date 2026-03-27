@@ -100,6 +100,7 @@ function updateSliders() {
   if (ringLbl) ringLbl.textContent = getScoreLabel(score);
   if (barFill)  barFill.style.width = score + '%';
   drawRing(score);
+  updateRecommendations(score);
 }
 
 function getCurrentScore() {
@@ -146,6 +147,63 @@ function drawRing(score) {
 function saveHealth() {
   store('healthScore', { score: getCurrentScore(), ts: Date.now() });
   showToast('✓ Health score saved!');
+}
+
+function getRecommendations(score) {
+  const recs = [];
+
+  const sleep = parseInt(document.getElementById('sl1')?.value || 7);
+  const activity = parseInt(document.getElementById('sl2')?.value || 7);
+  const nutrition = parseInt(document.getElementById('sl3')?.value || 7);
+  const social = parseInt(document.getElementById('sl4')?.value || 7);
+
+  // 🔴 Overall score based
+  if (score < 40) {
+    recs.push("⚠️ Your health score is low. Focus on small improvements in daily habits.");
+  } else if (score < 60) {
+    recs.push("⚡ You're doing okay, but there's room for improvement.");
+  } else if (score < 80) {
+    recs.push("👍 Good job! Maintain consistency to improve further.");
+  } else {
+    recs.push("🔥 Excellent! Keep up your healthy lifestyle.");
+  }
+
+  // 🧩 Factor-specific tips
+  if (sleep < 5) {
+    recs.push("😴 Improve sleep: aim for 7–8 hours and fix your sleep schedule.");
+  }
+
+  if (activity < 5) {
+    recs.push("🏃 Increase activity: even 20–30 mins walk helps a lot.");
+  }
+
+  if (nutrition < 5) {
+    recs.push("🥗 Focus on balanced meals: add fruits, protein, and hydration.");
+  }
+
+  if (social < 5) {
+    recs.push("💬 Connect with friends/family — social health matters too.");
+  }
+
+  // 🟡 Medium suggestions (5–7 range)
+  if (sleep >= 5 && sleep < 7) {
+    recs.push("🛌 Try improving sleep quality (less screen time before bed).");
+  }
+
+  if (activity >= 5 && activity < 7) {
+    recs.push("🚶 Try adding light exercise to boost your energy.");
+  }
+
+  return recs;
+}
+
+function updateRecommendations(score) {
+  const list = document.getElementById('recommendationList');
+  if (!list) return;
+
+  const recs = getRecommendations(score);
+
+  list.innerHTML = recs.map(r => `<li>${r}</li>`).join('');
 }
 
 /* ============================================================

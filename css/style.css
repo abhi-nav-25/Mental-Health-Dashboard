@@ -380,7 +380,23 @@ label { font-size: 0.82rem; color: var(--text3); margin-bottom: 6px; display: bl
 .factor-name  { font-size: 0.9rem; color: var(--text); min-width: 140px; }
 .factor-score { margin-left: auto; font-size: 0.88rem; font-weight: 600; color: var(--accent); min-width: 36px; text-align: right; }
 .slider-container { flex: 1; }
-
+.recommendation-list {
+  padding-left: 18px;
+  line-height: 1.8;
+}
+.card{
+  border-left: 4px solid #00d4c8;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.recommendation-list li {
+  margin-bottom: 6px;
+}
+.card.gap-24 {
+  border: 1px solid rgba(255,255,255,0.08); /* ensures full box */
+  border-left: 4px solid #00d4c8;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  border-radius: 12px;
+}
 /* ============================================================
    MOOD TRACKER PAGE
    ============================================================ */
